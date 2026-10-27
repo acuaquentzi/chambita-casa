@@ -1,8 +1,8 @@
-import { LOGO } from '../logo'
 import { type View } from '../data'
 import type { SyncState } from '../store'
 import { LayoutDashboard, FolderKanban, ListChecks, Columns3, GanttChart, Users, ListTodo, WalletCards, House } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { LogoMark } from './LogoMark'
 
 const NAV: { id: View; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'mine', label: 'Hoy', icon: ListTodo },
@@ -40,7 +40,7 @@ export function Sidebar({ view, onNavigate, sync, counts }: Props) {
     <div className="flex flex-col h-full w-full" style={{ background: 'hsl(var(--sidebar))' }}>
       <div className="px-5 pt-6 pb-5 border-b border-white/[0.06]">
         <div className="flex items-center gap-2.5">
-          <div role="img" aria-label="Marea" className="w-9 h-9 rounded-xl bg-white shadow-[0_4px_14px_-4px_rgba(45,212,191,0.55)] shrink-0" style={{ backgroundImage: `url(${LOGO})`, backgroundSize: '92%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} />
+          <LogoMark className="h-9 w-9 shadow-[0_4px_14px_-4px_rgba(45,212,191,0.55)]" />
           <div>
             <p className="text-white text-sm font-semibold leading-tight">Marea</p>
             <p className="text-[11px] leading-tight" style={{ color: 'hsl(var(--sidebar-foreground))' }}>Finanzas y hogar</p>
