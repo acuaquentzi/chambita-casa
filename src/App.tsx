@@ -32,7 +32,8 @@ import { ExportMenu } from './components/ExportMenu'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { HelpCircle, Search, Menu, Sun, Moon, Plus, UserRound, X, LogOut, ListTodo, FolderKanban, WalletCards, House } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { HelpCircle, Search, Menu, Sun, Moon, Plus, UserRound, X, LogOut, ListTodo, FolderKanban, WalletCards, House, MoreHorizontal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const VIEW_TITLES: Record<View, string> = {
@@ -290,16 +291,29 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
                 <Button size="sm" className="h-8 gap-1.5" onClick={() => setAddTaskOpen(true)}>
                   <Plus className="h-4 w-4" /> <span className="hidden sm:inline">Nueva tarea</span>
                 </Button>
-                <SavedViews filters={filters} savedViews={savedViews} onApply={setFilters}
-                  onSave={v => setSavedViews(p => [...p, v])} onDelete={id => setSavedViews(p => p.filter(v => v.id !== id))} />
-                <ExportMenu tasks={tasks} projects={projects} filters={filters} today={today} />
+                <div className="hidden items-center sm:flex">
+                  <SavedViews filters={filters} savedViews={savedViews} onApply={setFilters}
+                    onSave={v => setSavedViews(p => [...p, v])} onDelete={id => setSavedViews(p => p.filter(v => v.id !== id))} />
+                  <ExportMenu tasks={tasks} projects={projects} filters={filters} today={today} />
+                </div>
               </>}
               <Notifications tasks={tasks} onSelectTask={setSelectedTask} />
-              <Button variant="ghost" size="icon" onClick={() => setTourOpen(true)} aria-label="Guía de uso" title="Guía de uso"><HelpCircle className="h-5 w-5" /></Button>
-              <Button variant="ghost" size="icon" onClick={onSignOut} aria-label="Cerrar sesión" title="Cerrar sesión"><LogOut className="h-5 w-5" /></Button>
-              <Button variant="ghost" size="icon" onClick={() => setDark(d => !d)} aria-label="Cambiar tema">
-                {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </Button>
+              <div className="hidden items-center sm:flex">
+                <Button variant="ghost" size="icon" onClick={() => setTourOpen(true)} aria-label="Guía de uso" title="Guía de uso"><HelpCircle className="h-5 w-5" /></Button>
+                <Button variant="ghost" size="icon" onClick={onSignOut} aria-label="Cerrar sesión" title="Cerrar sesión"><LogOut className="h-5 w-5" /></Button>
+                <Button variant="ghost" size="icon" onClick={() => setDark(d => !d)} aria-label="Cambiar tema">
+                  {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                </Button>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="sm:hidden" aria-label="Más opciones"><MoreHorizontal className="h-5 w-5" /></Button></DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => setTourOpen(true)}><HelpCircle className="mr-2 h-4 w-4" />Guía de uso</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setDark(d => !d)}>{dark ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}{dark ? 'Tema claro' : 'Tema oscuro'}</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={onSignOut}><LogOut className="mr-2 h-4 w-4" />Cerrar sesión</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </header>
 
