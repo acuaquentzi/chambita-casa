@@ -40,7 +40,7 @@ export function Sidebar({ view, onNavigate, sync, counts }: Props) {
     <div className="marea-sidebar flex h-full w-full flex-col rounded-[28px] text-white shadow-lift">
       <div className="px-5 pb-5 pt-6">
         <div className="flex items-center gap-3">
-          <LogoMark className="h-11 w-11 rounded-2xl shadow-[0_8px_24px_-8px_rgba(45,212,191,0.75)]" />
+          <LogoMark className="h-12 w-12" />
           <div>
             <p className="text-lg font-extrabold leading-tight tracking-[-0.04em]">Marea</p>
             <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/50">Nuestra vida, en orden</p>
