@@ -53,7 +53,7 @@ export function InlineOwner({ task, onUpdate, field = 'owner', showName = true }
       <SelectTrigger className={cn(bare, 'rounded px-1 -mx-1 hover:bg-muted')} onClick={e => e.stopPropagation()} aria-label="Cambiar responsable">{face}</SelectTrigger>
       <SelectContent>
         {field === 'coOwner' && <SelectItem value="__none">Sin corresponsable</SelectItem>}
-        {ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}
+        {ALL_OWNERS.filter(o => field === 'owner' || o !== task.owner).map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}
       </SelectContent>
     </Select></Stop>
   )
