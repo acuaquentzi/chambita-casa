@@ -46,6 +46,7 @@ const FIELD_LABELS: Record<string, string> = {
   deleted: 'Eliminada', target: 'Meta',
 }
 
+// La cabecera móvil reserva las acciones secundarias para el menú “Más”.
 export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () => void }) {
   const store = useStore(user)
   const [today, setToday] = useState(todayISO)
