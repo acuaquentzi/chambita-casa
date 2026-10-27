@@ -1,3 +1,4 @@
+sed: --: No such file or directory
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   type View, type Filters, type Task, type BaseTask, type SavedView, type ProjectMeta,
@@ -5,6 +6,7 @@ import {
   enrich, computeProjects, computeTeam, todayISO, addDays, fmtDate, SHEET_PROJECT_METAS, setProjectMetas,
 } from './data'
 import { useStore, useProfiles, matchOwner, type Change } from './store'
+import type { AppUser } from './supabase'
 import { RescheduleProvider, type RescheduleApi } from './reschedule'
 import { MyWork } from './components/MyWork'
 import { SearchPalette } from './components/SearchPalette'
@@ -22,6 +24,7 @@ import { TasksView } from './components/TasksView'
 import { KanbanView } from './components/KanbanView'
 import { GanttView } from './components/GanttView'
 import { TeamView } from './components/TeamView'
+import { MoneyHub } from './components/MoneyHub'
 import { ProjectDetail } from './components/ProjectDetail'
 import { TaskDetail } from './components/TaskDetail'
 import { Notifications } from './components/Notifications'
@@ -30,11 +33,11 @@ import { ExportMenu } from './components/ExportMenu'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { HelpCircle, Search, Menu, Sun, Moon, Plus, UserRound, X, LogOut, ListTodo, LayoutDashboard, ListChecks, Users } from 'lucide-react'
+import { HelpCircle, Search, Menu, Sun, Moon, Plus, UserRound, X, LogOut, ListTodo, FolderKanban, WalletCards, House } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const VIEW_TITLES: Record<View, string> = {
-  mine: 'Mis pendientes', dashboard: 'Dashboard', projects: 'Proyectos', tasks: 'Tareas', kanban: 'Kanban', gantt: 'Gantt', team: 'Nosotros', audit: 'Bitácora',
+  mine: 'Hoy', dashboard: 'Resumen de proyectos', projects: 'Proyectos', tasks: 'Tareas', kanban: 'Kanban', gantt: 'Gantt', team: 'Nosotros', audit: 'Bitácora', money: 'Dinero', home: 'Hogar',
 }
 
 const FIELD_LABELS: Record<string, string> = {
@@ -43,8 +46,8 @@ const FIELD_LABELS: Record<string, string> = {
   deleted: 'Eliminada', target: 'Meta',
 }
 
-export default function App({ onSignOut }: { onSignOut: () => void }) {
-  const store = useStore()
+export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () => void }) {
+  const store = useStore(user)
   const [today, setToday] = useState(todayISO)
   const [view, setView] = useState<View>(() => (window.innerWidth < 640 ? 'mine' : 'dashboard'))
   const [filters, setFilters] = useState<Filters>(defaultFilters)
@@ -250,6 +253,7 @@ export default function App({ onSignOut }: { onSignOut: () => void }) {
     tasks: tasks.filter(t => t.status !== 'Completado').length, overdue: tasks.filter(t => t.health === 'Atrasado').length,
   }} />
   const myFilterOn = !!myOwner && filters.owner === myOwner
+  const taskWorkspace = view !== 'money' && view !== 'home'
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -273,22 +277,24 @@ export default function App({ onSignOut }: { onSignOut: () => void }) {
               </p>
             </div>
             <div className="ml-auto flex items-center gap-1">
-              <Button variant="outline" size="sm" className="h-8 gap-2 text-muted-foreground hidden md:inline-flex" onClick={() => setSearchOpen(true)}>
-                <Search className="h-4 w-4" /> Buscar <kbd className="text-[10px] font-semibold border rounded px-1 bg-muted">Ctrl K</kbd>
-              </Button>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Buscar" onClick={() => setSearchOpen(true)}><Search className="h-5 w-5" /></Button>
-              {myOwner && (
-                <Button variant={myFilterOn ? 'default' : 'ghost'} size="sm" className="h-8 gap-1.5 hidden md:inline-flex"
-                  onClick={() => setFilters(f => ({ ...f, owner: myFilterOn ? '' : myOwner }))}>
-                  <UserRound className="h-4 w-4" /> Mis tareas
+              {taskWorkspace && <>
+                <Button variant="outline" size="sm" className="h-8 gap-2 text-muted-foreground hidden md:inline-flex" onClick={() => setSearchOpen(true)}>
+                  <Search className="h-4 w-4" /> Buscar <kbd className="text-[10px] font-semibold border rounded px-1 bg-muted">Ctrl K</kbd>
                 </Button>
-              )}
-              <Button size="sm" className="h-8 gap-1.5" onClick={() => setAddTaskOpen(true)}>
-                <Plus className="h-4 w-4" /> <span className="hidden sm:inline">Nueva tarea</span>
-              </Button>
-              <SavedViews filters={filters} savedViews={savedViews} onApply={setFilters}
-                onSave={v => setSavedViews(p => [...p, v])} onDelete={id => setSavedViews(p => p.filter(v => v.id !== id))} />
-              <ExportMenu tasks={tasks} projects={projects} filters={filters} today={today} />
+                <Button variant="ghost" size="icon" className="md:hidden" aria-label="Buscar" onClick={() => setSearchOpen(true)}><Search className="h-5 w-5" /></Button>
+                {myOwner && (
+                  <Button variant={myFilterOn ? 'default' : 'ghost'} size="sm" className="h-8 gap-1.5 hidden md:inline-flex"
+                    onClick={() => setFilters(f => ({ ...f, owner: myFilterOn ? '' : myOwner }))}>
+                    <UserRound className="h-4 w-4" /> Mis tareas
+                  </Button>
+                )}
+                <Button size="sm" className="h-8 gap-1.5" onClick={() => setAddTaskOpen(true)}>
+                  <Plus className="h-4 w-4" /> <span className="hidden sm:inline">Nueva tarea</span>
+                </Button>
+                <SavedViews filters={filters} savedViews={savedViews} onApply={setFilters}
+                  onSave={v => setSavedViews(p => [...p, v])} onDelete={id => setSavedViews(p => p.filter(v => v.id !== id))} />
+                <ExportMenu tasks={tasks} projects={projects} filters={filters} today={today} />
+              </>}
               <Notifications tasks={tasks} onSelectTask={setSelectedTask} />
               <Button variant="ghost" size="icon" onClick={() => setTourOpen(true)} aria-label="Guía de uso" title="Guía de uso"><HelpCircle className="h-5 w-5" /></Button>
               <Button variant="ghost" size="icon" onClick={onSignOut} aria-label="Cerrar sesión" title="Cerrar sesión"><LogOut className="h-5 w-5" /></Button>
@@ -319,10 +325,12 @@ export default function App({ onSignOut }: { onSignOut: () => void }) {
             {view === 'kanban' && <KanbanView {...commonProps} />}
             {view === 'gantt' && <GanttView tasks={tasks} projects={projects} filters={filters} setFilters={setFilters} today={today} onSelectTask={setSelectedTask} />}
             {view === 'team' && <TeamView tasks={tasks} team={team} onSelectTask={setSelectedTask} onNavigate={navigate} />}
+            {view === 'money' && <MoneyHub onOpenProjects={() => navigate('projects')} />}
+            {view === 'home' && <TeamView tasks={tasks} team={team} onSelectTask={setSelectedTask} onNavigate={navigate} />}
           </main>
 
           <nav className="sm:hidden grid grid-cols-4 border-t bg-card shrink-0" aria-label="Navegación principal">
-            {([['mine', 'Pendientes', ListTodo], ['dashboard', 'Dashboard', LayoutDashboard], ['tasks', 'Tareas', ListChecks], ['team', 'Nosotros', Users]] as const).map(([v, label, Icon]) => (
+            {([['mine', 'Hoy', ListTodo], ['projects', 'Proyectos', FolderKanban], ['money', 'Dinero', WalletCards], ['home', 'Hogar', House]] as const).map(([v, label, Icon]) => (
               <button key={v} onClick={() => navigate(v)} aria-current={view === v ? 'page' : undefined}
                 className={cn('flex flex-col items-center justify-center gap-0.5 h-14 text-[11px]', view === v ? 'text-primary font-semibold' : 'text-muted-foreground')}>
                 <Icon className="h-5 w-5" />{label}
