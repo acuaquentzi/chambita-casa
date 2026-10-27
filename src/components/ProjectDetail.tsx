@@ -88,12 +88,22 @@ export function ProjectDetail({ project: p, tasks, today, onClose, onUpdateTask,
                 onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }}
                 className="w-full bg-transparent text-lg font-semibold leading-snug rounded px-1 -mx-1 hover:bg-muted focus:bg-muted focus:outline-none" />
               <DialogDescription asChild>
-                <div className="mt-1">
-                  <Select value={p.owner} onValueChange={v => onUpdateProject(p.id, { owner: v })}>
-                    <SelectTrigger className="h-7 w-auto gap-1.5 border-0 bg-transparent px-1 -mx-1 text-xs shadow-none hover:bg-muted" aria-label="Owner del proyecto">
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                  <Select value={p.owner} onValueChange={v => onUpdateProject(p.id, { owner: v, ...(p.coOwner === v ? { coOwner: '' } : {}) })}>
+                    <SelectTrigger className="h-7 w-auto gap-1.5 border-0 bg-transparent px-1 -mx-1 text-xs shadow-none hover:bg-muted" aria-label="Responsable principal del proyecto">
                       <PersonAvatar name={p.owner} size="xs" /><SelectValue />
                     </SelectTrigger>
                     <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}</SelectContent>
+                  </Select>
+                  <span className="text-[10px] uppercase tracking-wide text-muted-foreground">con</span>
+                  <Select value={p.coOwner || '__none'} onValueChange={v => onUpdateProject(p.id, { coOwner: v === '__none' ? '' : v })}>
+                    <SelectTrigger className="h-7 w-auto gap-1.5 border-0 bg-transparent px-1 text-xs shadow-none hover:bg-muted" aria-label="Corresponsable del proyecto">
+                      {p.coOwner ? <><PersonAvatar name={p.coOwner} size="xs" /><SelectValue /></> : <span className="text-muted-foreground">+ corresponsable</span>}
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none">Sin corresponsable</SelectItem>
+                      {ALL_OWNERS.filter(o => o !== p.owner).map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}
+                    </SelectContent>
                   </Select>
                 </div>
               </DialogDescription>
