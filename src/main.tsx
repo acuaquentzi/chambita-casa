@@ -1,3 +1,4 @@
+sed: --: No such file or directory
 import { StrictMode, useEffect, useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import type { Session } from '@supabase/supabase-js'
@@ -5,7 +6,6 @@ import './index.css'
 import App from './App.tsx'
 import { Login } from './components/Login'
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config'
-import { setCurrentUser } from './store'
 import { supabase, makeUser } from './supabase'
 
 function Root() {
@@ -16,11 +16,12 @@ function Root() {
     return () => data.subscription.unsubscribe()
   }, [])
   const uid = session?.user.id
-  useMemo(() => setCurrentUser(session ? makeUser(session) : null), [uid])
+  const appUser = useMemo(() => session ? makeUser(session) : null, [uid])
+  useEffect(() => { appUser?.syncProfile() }, [appUser])
   if (session === undefined) return null
-  if (!session) return <Login />
+  if (!session || !appUser) return <Login />
   // key: al cambiar de usuario se reinicia el estado de la app.
-  return <App key={session.user.id} onSignOut={() => supabase.auth.signOut()} />
+  return <App key={session.user.id} user={appUser} onSignOut={() => supabase.auth.signOut()} />
 }
 
 const missing = [!SUPABASE_URL && 'VITE_SUPABASE_URL', !SUPABASE_ANON_KEY && 'VITE_SUPABASE_ANON_KEY'].filter(Boolean)
