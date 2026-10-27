@@ -1,3 +1,4 @@
+sed: --: No such file or directory
 // Capa mínima que imita la API de "documentos" que usaba el artifact original (collection/doc/onSnapshot),
 // guardando todo en una sola tabla `docs` de Supabase (ver supabase/schema.sql).
 import { createClient, type Session } from '@supabase/supabase-js'
@@ -101,15 +102,18 @@ export const memberFor = (email?: string | null) =>
 
 export function makeUser(session: Session) {
   const u = session.user
-  const name = memberFor(u.email)?.name ?? u.email ?? 'Tú'
-  db.doc(`profiles/${u.id}`).set({ name }).catch(() => {})
+  const member = memberFor(u.email)
+  const name = member?.name ?? u.email ?? 'Tú'
   return {
+    syncProfile: () => db.doc(`profiles/${u.id}`).set({ name }).catch(() => {}),
     me: async () => ({ id: u.id, name, avatarUrl: '' }),
-    isOwner: async () => false,
-    can: async () => true,
+    isOwner: async () => member?.email.toLowerCase() === MEMBERS[0]?.email.toLowerCase(),
+    can: async (_capability: string) => true,
     async profiles(ids: string[]) {
       const { data } = await supabase.from('docs').select('path, data').in('path', ids.map(id => `profiles/${id}`))
       return Object.fromEntries((data ?? []).map((r: any) => [idOf(r.path), { name: r.data.name, avatarUrl: '' }]))
     },
   }
 }
+
+export type AppUser = ReturnType<typeof makeUser>
