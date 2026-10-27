@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 // Capa mínima que imita la API de "documentos" que usaba el artifact original (collection/doc/onSnapshot),
 // guardando todo en una sola tabla `docs` de Supabase (ver supabase/schema.sql).
 import { createClient, type Session } from '@supabase/supabase-js'
