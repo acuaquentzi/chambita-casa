@@ -8,16 +8,19 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { FinanceInbox } from '@/components/FinanceInbox'
 import {
   ACCOUNT_TYPES, IMPORT_METHODS, INSTITUTIONS, cardCycle, money,
-  type FinanceAccount, type FinanceAccountType, type FinanceImportMethod,
+  type FinanceAccount, type FinanceAccountType, type FinanceImportMethod, type FinanceTransaction,
 } from '@/finance'
 
 interface Props {
   accounts: FinanceAccount[]
+  transactions: FinanceTransaction[]
   owners: string[]
   today: string
   onSaveAccount: (account: FinanceAccount, create?: boolean) => void
+  onSaveTransaction: (transaction: FinanceTransaction, create?: boolean) => void
   onOpenProjects: () => void
 }
 
@@ -28,7 +31,7 @@ const EMPTY = {
   balance: '', creditLimit: '', statementDay: '', paymentDueDay: '', importMethod: 'CSV o Excel' as FinanceImportMethod,
 }
 
-export function MoneyHub({ accounts, owners, today, onSaveAccount, onOpenProjects }: Props) {
+export function MoneyHub({ accounts, transactions, owners, today, onSaveAccount, onSaveTransaction, onOpenProjects }: Props) {
   const [section, setSection] = useState<Section>('resumen')
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<FinanceAccount | null>(null)
@@ -139,7 +142,7 @@ export function MoneyHub({ accounts, owners, today, onSaveAccount, onOpenProject
         </section>
       )}
 
-      {section === 'movimientos' && <ComingSoon icon={ReceiptText} title="Importación de movimientos" text="El siguiente bloque permitirá cargar CSV, Excel y PDF; Marea detectará duplicados, transferencias y pagos de tarjeta antes de guardar." />}
+      {section === 'movimientos' && <FinanceInbox accounts={accounts} owners={owners} today={today} transactions={transactions} onSave={onSaveTransaction} />}
       {section === 'conciliacion' && <ComingSoon icon={RefreshCw} title="Conciliación cada 5 o 7 días" text="Aquí verán únicamente movimientos nuevos, cargos sin categoría y diferencias contra el saldo de cada aplicación bancaria." />}
 
       <section className="flex flex-col gap-4 rounded-xl border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
