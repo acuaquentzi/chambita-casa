@@ -33,7 +33,7 @@ export function ProjectsView({ projects, filters, setFilters, onSelectProject, o
     const q = filters.search.toLowerCase()
     const d = projects.filter(p =>
       (!q || p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)) &&
-      (!filters.owner || p.owner === filters.owner) &&
+      (!filters.owner || p.owner === filters.owner || p.coOwner === filters.owner) &&
       (!filters.status || p.status === filters.status) &&
       (!filters.priority || p.priority === filters.priority) &&
       (!filters.health || p.health === filters.health))
@@ -98,7 +98,7 @@ export function ProjectsView({ projects, filters, setFilters, onSelectProject, o
                 </div>
                 <div className="flex items-center gap-2 mt-auto text-[11px] text-muted-foreground">
                   <PersonAvatar name={p.owner} size="xs" />
-                  <span className="truncate">{displayName(p.owner)}</span>
+                  <span className="truncate">{displayName(p.owner)}{p.coOwner ? ` + ${displayName(p.coOwner)}` : ''}</span>
                   <span className={cn('ml-auto tabular-nums whitespace-nowrap', p.daysToTarget < 0 && p.health !== 'Completado' && 'text-red-600 dark:text-red-400 font-semibold')}>
                     Meta {fmtDate(p.target)}
                   </span>
@@ -130,7 +130,7 @@ export function ProjectsView({ projects, filters, setFilters, onSelectProject, o
                   <TableRow key={p.id} className="cursor-pointer" onClick={() => onSelectProject(p.id)}>
                     <TableCell className="font-semibold text-primary">{p.id}</TableCell>
                     <TableCell className="max-w-[260px]"><span className="truncate block font-medium">{p.name}</span></TableCell>
-                    <TableCell className="whitespace-nowrap"><span className="flex items-center gap-2"><PersonAvatar name={p.owner} size="xs" />{displayName(p.owner)}</span></TableCell>
+                    <TableCell className="whitespace-nowrap"><span className="flex items-center gap-2"><PersonAvatar name={p.owner} size="xs" />{displayName(p.owner)}{p.coOwner ? ` + ${displayName(p.coOwner)}` : ''}</span></TableCell>
                     <TableCell><Badge className={cn(priorityStyle(p.priority), 'border-0 text-[11px]')}>{p.priority}</Badge></TableCell>
                     <TableCell><Badge className={cn(statusStyle(p.status), 'border-0 text-[11px]')}>{p.status}</Badge></TableCell>
                     <TableCell>
