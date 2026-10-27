@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 # AGENTS.md — Chambita Casa
 
 Instrucciones para agentes de código (Codex, Claude Code, etc.). Léelas antes de cambiar algo.
