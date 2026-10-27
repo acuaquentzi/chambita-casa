@@ -1,13 +1,19 @@
+sed: --: No such file or directory
 import { LOGO } from '../logo'
 import { type View } from '../data'
 import type { SyncState } from '../store'
-import { LayoutDashboard, FolderKanban, ListChecks, Columns3, GanttChart, Users, ListTodo } from 'lucide-react'
+import { LayoutDashboard, FolderKanban, ListChecks, Columns3, GanttChart, Users, ListTodo, WalletCards, House } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV: { id: View; label: string; icon: typeof LayoutDashboard }[] = [
-  { id: 'mine', label: 'Mis pendientes', icon: ListTodo },
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'mine', label: 'Hoy', icon: ListTodo },
   { id: 'projects', label: 'Proyectos', icon: FolderKanban },
+  { id: 'money', label: 'Dinero', icon: WalletCards },
+  { id: 'home', label: 'Hogar', icon: House },
+]
+
+const WORK_VIEWS: { id: View; label: string; icon: typeof LayoutDashboard }[] = [
+  { id: 'dashboard', label: 'Resumen', icon: LayoutDashboard },
   { id: 'tasks', label: 'Tareas', icon: ListChecks },
   { id: 'kanban', label: 'Kanban', icon: Columns3 },
   { id: 'gantt', label: 'Gantt', icon: GanttChart },
@@ -43,8 +49,25 @@ export function Sidebar({ view, onNavigate, sync, counts }: Props) {
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">Vida en casa</p>
         {NAV.map(item => {
+          const active = view === item.id
+          return (
+            <button key={item.id} onClick={() => onNavigate(item.id)}
+              className={cn('relative flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-200 focus-visible:outline-indigo-400',
+                active ? 'bg-white/[0.10] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-indigo-400' : 'text-white/55 hover:text-white hover:bg-white/[0.05]')}>
+              <item.icon className={cn('h-[18px] w-[18px]', active ? 'opacity-100' : 'opacity-60')} />
+              {item.label}
+              {item.id === 'tasks' && <span className="ml-auto text-[11px] tabular-nums text-white/40">{counts.tasks}</span>}
+              {item.id === 'dashboard' && counts.overdue > 0 && (
+                <span className="ml-auto text-[10px] font-bold tabular-nums rounded-full bg-red-500/90 text-white px-1.5 py-px">{counts.overdue}</span>
+              )}
+            </button>
+          )
+        })}
+        <p className="px-3 pb-2 pt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">Vistas de trabajo</p>
+        {WORK_VIEWS.map(item => {
           const active = view === item.id
           return (
             <button key={item.id} onClick={() => onNavigate(item.id)}
