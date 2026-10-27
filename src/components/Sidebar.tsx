@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 import { LOGO } from '../logo'
 import { type View } from '../data'
 import type { SyncState } from '../store'
