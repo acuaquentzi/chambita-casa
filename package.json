@@ -1,3 +1,4 @@
+sed: --: No such file or directory
 {
   "name": "chambita-casa",
   "private": true,
@@ -5,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc --noEmit -p tsconfig.app.json && vite build",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "preview": "vite preview"
   },
