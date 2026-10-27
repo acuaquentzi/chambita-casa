@@ -9,7 +9,7 @@ Todo el texto de la interfaz va en **español de México**.
 
 ## Stack
 - React 18 + TypeScript + Vite + Tailwind + shadcn/ui (`src/components/ui`, no editar salvo necesidad).
-- Supabase: inicio de sesión con código de 6 dígitos por correo y una sola tabla `docs` (ver `supabase/schema.sql`).
+- Supabase: inicio de sesión con correo y contraseña (sin envío de correos) y una sola tabla `docs` (ver `supabase/schema.sql`).
 - Publicación: Vercel, automático con cada push o merge a `main`.
 
 ## Comandos

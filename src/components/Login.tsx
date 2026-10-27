@@ -4,32 +4,31 @@ import { LOGO } from '../logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-// Acceso con código de 6 dígitos por correo: funciona dentro de la app instalada en iPhone,
-// donde un enlace mágico abriría Safari en lugar de la app.
+// Acceso con correo y contraseña: no depende de enviar correos (el SMTP gratuito de Supabase es muy limitado)
+// y funciona dentro de la app instalada en iPhone. Solo los correos de config.ts pueden entrar.
 export function Login() {
   const [email, setEmail] = useState('')
-  const [code, setCode] = useState('')
-  const [step, setStep] = useState<'email' | 'code'>('email')
+  const [password, setPassword] = useState('')
+  const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
 
-  const send = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     const mail = email.trim().toLowerCase()
     if (!memberFor(mail)) { setMsg('Ese correo no tiene acceso a esta app.'); return }
+    if (password.length < 8) { setMsg('La contraseña debe tener al menos 8 caracteres.'); return }
     setBusy(true); setMsg('')
-    const { error } = await supabase.auth.signInWithOtp({ email: mail, options: { shouldCreateUser: true } })
+    if (mode === 'signup') {
+      const { data, error } = await supabase.auth.signUp({ email: mail, password })
+      setBusy(false)
+      if (error) setMsg(/registered|exists/i.test(error.message) ? 'Ese correo ya tiene contraseña. Usa "Entrar".' : `No se pudo crear: ${error.message}`)
+      else if (!data.session) setMsg('Cuenta creada, pero falta desactivar "Confirm email" en Supabase (ver README).')
+      return
+    }
+    const { error } = await supabase.auth.signInWithPassword({ email: mail, password })
     setBusy(false)
-    if (error) setMsg(error.status === 429 ? 'Demasiados intentos. Espera unos minutos.' : `No se pudo enviar el código: ${error.message}`)
-    else { setStep('code'); setMsg('Te enviamos un código a tu correo.') }
-  }
-
-  const verify = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setBusy(true); setMsg('')
-    const { error } = await supabase.auth.verifyOtp({ email: email.trim().toLowerCase(), token: code.trim(), type: 'email' })
-    setBusy(false)
-    if (error) setMsg('Código incorrecto o vencido. Pide uno nuevo.')
+    if (error) setMsg(/invalid/i.test(error.message) ? 'Correo o contraseña incorrectos. Si es tu primera vez, toca "Crear mi contraseña".' : `No se pudo entrar: ${error.message}`)
   }
 
   return (
@@ -43,21 +42,16 @@ export function Login() {
             <p className="text-sm text-muted-foreground">Nuestros pendientes, en un solo lugar.</p>
           </div>
         </div>
-        {step === 'email' ? (
-          <form onSubmit={send} className="space-y-3">
-            <label className="block text-sm font-medium" htmlFor="email">Tu correo</label>
-            <Input id="email" type="email" inputMode="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="nombre@gmail.com" />
-            <Button type="submit" className="w-full" disabled={busy}>{busy ? 'Enviando…' : 'Enviarme un código'}</Button>
-          </form>
-        ) : (
-          <form onSubmit={verify} className="space-y-3">
-            <label className="block text-sm font-medium" htmlFor="code">Código de 6 dígitos</label>
-            <Input id="code" inputMode="numeric" autoComplete="one-time-code" required value={code} onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 8))}
-              placeholder="123456" className="text-center text-lg tracking-[0.4em] tabular-nums" />
-            <Button type="submit" className="w-full" disabled={busy || code.length < 6}>{busy ? 'Verificando…' : 'Entrar'}</Button>
-            <button type="button" className="text-xs text-muted-foreground underline" onClick={() => { setStep('email'); setCode(''); setMsg('') }}>Usar otro correo o pedir otro código</button>
-          </form>
-        )}
+        <form onSubmit={submit} className="space-y-3">
+          <label className="block text-sm font-medium" htmlFor="email">Correo</label>
+          <Input id="email" type="email" inputMode="email" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} placeholder="nombre@gmail.com" />
+          <label className="block text-sm font-medium" htmlFor="password">{mode === 'signup' ? 'Crea tu contraseña (mínimo 8)' : 'Contraseña'}</label>
+          <Input id="password" type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} required value={password} onChange={e => setPassword(e.target.value)} />
+          <Button type="submit" className="w-full" disabled={busy}>{busy ? 'Un momento…' : mode === 'signup' ? 'Crear mi contraseña y entrar' : 'Entrar'}</Button>
+          <button type="button" className="text-xs text-muted-foreground underline" onClick={() => { setMode(m => (m === 'login' ? 'signup' : 'login')); setMsg('') }}>
+            {mode === 'login' ? 'Primera vez: crear mi contraseña' : 'Ya tengo contraseña: entrar'}
+          </button>
+        </form>
         {msg && <p className="text-sm text-muted-foreground" role="status">{msg}</p>}
       </div>
     </div>
