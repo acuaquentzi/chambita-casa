@@ -8,7 +8,7 @@ export type View = 'audit' | 'mine' | 'dashboard' | 'projects' | 'tasks' | 'kanb
 
 export interface Link { title: string; url: string }
 export interface ProjectMeta {
-  id: string; name: string; owner: string; priority: Priority | string; status: Status | string
+  id: string; name: string; owner: string; coOwner?: string; priority: Priority | string; status: Status | string
   start: string; target: string; deleted?: boolean; links?: Link[]
 }
 export interface BaseTask {
@@ -119,7 +119,7 @@ export function computeTeam(tasks: Task[], projects: Project[]): TeamMember[] {
     mt.forEach(t => statusCounts[t.status]++)
     return {
       name,
-      projects: projects.filter(p => p.owner === name).length,
+      projects: projects.filter(p => p.owner === name || p.coOwner === name).length,
       tasks: mt.length,
       open: mt.length - statusCounts['Completado'],
       overdue: mt.filter(t => t.health === 'Atrasado').length,
