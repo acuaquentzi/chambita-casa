@@ -40,3 +40,15 @@ Todo el texto de la interfaz va en **español de México**.
 ## Estilo
 - Sigue el estilo del código existente: componentes funcionales, Tailwind, comentarios breves en español solo donde aporten.
 - Diseño primero para móvil (375 px de ancho): nada debe desbordarse horizontalmente.
+
+## Estado actual (27-oct-2026, al pasar de Claude Code a Codex)
+- Publicada en https://chambita-casa.vercel.app (Vercel, se publica sola con cada merge a `main`).
+- Supabase: proyecto `qktxfczkveciqamnzvdg`. `supabase/schema.sql` ya debería estar ejecutado; "Confirm email" apagado.
+- Variables en Vercel: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (la segunda faltaba en el primer deploy).
+- **Nunca se ha probado con Supabase real** lo que viene después del login. Lo primero es verificar:
+  1. Crear contraseña y entrar con ambos correos.
+  2. Crear área y tarea; que aparezcan en el otro teléfono sin recargar (realtime).
+  3. Editar campos distintos de la misma tarea desde los dos lados (merge_doc no debe pisar).
+  4. Cerrar tarea pide comentario; mover fecha pide motivo.
+  5. Vista móvil (375 px) sin desbordes; instalación en iPhone desde Safari (Compartir → Agregar a inicio).
+- Ideas pendientes: tareas recurrentes (pagar luz, etc.); después, apagar "Allow new users to sign up" en Supabase.
