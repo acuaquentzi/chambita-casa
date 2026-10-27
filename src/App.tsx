@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   type View, type Filters, type Task, type BaseTask, type SavedView, type ProjectMeta,
-  defaultFilters, BASE_TASKS, DEFAULT_SAVED_VIEWS,
+  defaultFilters, BASE_TASKS, DEFAULT_SAVED_VIEWS, ALL_OWNERS,
   enrich, computeProjects, computeTeam, todayISO, addDays, fmtDate, SHEET_PROJECT_METAS, setProjectMetas,
 } from './data'
 import { useStore, useProfiles, matchOwner, type Change } from './store'
@@ -324,7 +324,8 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
             {view === 'kanban' && <KanbanView {...commonProps} />}
             {view === 'gantt' && <GanttView tasks={tasks} projects={projects} filters={filters} setFilters={setFilters} today={today} onSelectTask={setSelectedTask} />}
             {view === 'team' && <TeamView tasks={tasks} team={team} onSelectTask={setSelectedTask} onNavigate={navigate} />}
-            {view === 'money' && <MoneyHub onOpenProjects={() => navigate('projects')} />}
+            {view === 'money' && <MoneyHub accounts={store.financeAccounts} owners={ALL_OWNERS} today={today}
+              onSaveAccount={store.saveFinanceAccount} onOpenProjects={() => navigate('projects')} />}
             {view === 'home' && <TeamView tasks={tasks} team={team} onSelectTask={setSelectedTask} onNavigate={navigate} />}
           </main>
 
