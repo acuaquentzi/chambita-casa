@@ -1,11 +1,11 @@
+sed: --: No such file or directory
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { type BaseTask, type ProjectMeta, type Comment, type Activity, type Reschedule, type SavedView, ALL_OWNERS } from './data'
 
 import { db as supaDb } from './supabase'
+import type { AppUser } from './supabase'
 
 type Cap = any
-let currentUser: Cap | null = null
-export const setCurrentUser = (u: Cap | null) => { currentUser = u }
 
 export type SyncState = 'connecting' | 'live' | 'local' | 'readonly'
 
@@ -16,9 +16,6 @@ export interface WeeklyMetric { date: string; total: number; open: number; overd
 export interface AuditEvent { id: string; at: string; by: string | null; action: string; target: string; field: string; from: string; to: string }
 export interface Prefs { savedViews?: SavedView[]; lastSeen?: string; tourDone?: boolean }
 
-export const useCap = async (name: string): Promise<Cap | null> =>
-  name === 'db' ? supaDb : name === 'user' ? currentUser : null
-
 const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
 
 export function matchOwner(displayName: string): string | null {
@@ -28,7 +25,7 @@ export function matchOwner(displayName: string): string | null {
 const clean = (o: Record<string, unknown>) =>
   Object.fromEntries(Object.entries(o).filter(([k, v]) => v !== undefined && k !== 'daysLeft' && k !== 'health'))
 
-export function useStore() {
+export function useStore(user: AppUser) {
   const [overrides, setOverrides] = useState<Record<string, TaskPatch>>({})
   const [projectOverrides, setProjectOverrides] = useState<Record<string, ProjectPatch>>({})
   const [metrics, setMetrics] = useState<WeeklyMetric[]>([])
@@ -51,17 +48,14 @@ export function useStore() {
     const unsubs: (() => void)[] = []
     let cancelled = false
     ;(async () => {
-      const [db, user] = await Promise.all([useCap('db'), useCap('user')])
+      const db = supaDb
       if (cancelled) return
-      if (user) {
-        userRef.current = user
-        const m = await user.me()
-        uidRef.current = m.id
-        user.isOwner().then((o: boolean) => { if (!cancelled) setIsOwner(o) })
-        if (!cancelled) setMe({ id: m.id, name: m.name, avatarUrl: m.avatarUrl })
-        if ((await user.can('data.write')) === false) readonlyRef.current = true
-      }
-      if (!db) { setSync('local'); return }
+      userRef.current = user
+      const m = await user.me()
+      uidRef.current = m.id
+      user.isOwner().then((o: boolean) => { if (!cancelled) setIsOwner(o) })
+      if (!cancelled) setMe({ id: m.id, name: m.name, avatarUrl: m.avatarUrl })
+      if ((await user.can('data.write')) === false) readonlyRef.current = true
       dbRef.current = db
       const onErr = () => { if (!cancelled) setSync('local') }
       unsubs.push(db.collection('tasks').onSnapshot((snap: Cap) => {
@@ -96,7 +90,7 @@ export function useStore() {
       } else setPrefs({})
     })()
     return () => { cancelled = true; unsubs.forEach(u => u()) }
-  }, [])
+  }, [user])
 
   const handleWriteError = useCallback((e: Cap) => {
     if (e?.code === 'invalid_argument') { readonlyRef.current = true; setSync('readonly'); setError('Tu acceso es de solo lectura: los cambios no se guardaron.') }
