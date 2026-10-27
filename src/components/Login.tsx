@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { supabase, memberFor } from '../supabase'
-import { LOGO } from '../logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LogoMark } from './LogoMark'
 
 // Acceso con correo y contraseña: no depende de enviar correos (el SMTP gratuito de Supabase es muy limitado)
 // y funciona dentro de la app instalada en iPhone. Solo los correos de config.ts pueden entrar.
@@ -35,8 +35,7 @@ export function Login() {
     <div className="min-h-full flex items-center justify-center bg-background px-4 py-10">
       <div className="w-full max-w-sm space-y-6">
         <div className="flex items-center gap-3">
-          <div role="img" aria-label="Marea" className="w-11 h-11 rounded-xl bg-white shadow shrink-0"
-            style={{ backgroundImage: `url(${LOGO})`, backgroundSize: '92%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} />
+          <LogoMark className="h-11 w-11 shadow" />
           <div>
             <h1 className="text-xl font-bold tracking-tight">Marea</h1>
             <p className="text-sm text-muted-foreground">Finanzas, proyectos y hogar en un solo lugar.</p>
