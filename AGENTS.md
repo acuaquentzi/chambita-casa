@@ -1,9 +1,9 @@
-# AGENTS.md — Chambita Casa
+# AGENTS.md — Marea
 
 Instrucciones para agentes de código (Codex, Claude Code, etc.). Léelas antes de cambiar algo.
 
 ## Qué es
-App personal de pendientes para 2 personas (Alejandro y su pareja), hecha para usarse en iPhone como app instalada (PWA).
+App personal de finanzas, proyectos y pendientes para 2 personas (Alejandro y su pareja), hecha para usarse en iPhone como app instalada (PWA).
 Vistas: Mis pendientes, Dashboard, Proyectos (áreas: Casa, Finanzas, Salud…), Tareas, Kanban, Gantt y Nosotros.
 Todo el texto de la interfaz va en **español de México**.
 
@@ -52,6 +52,6 @@ Todo el texto de la interfaz va en **español de México**.
   4. Cerrar tarea pide comentario; mover fecha pide motivo.
   5. Vista móvil (375 px) sin desbordes; instalación en iPhone desde Safari (Compartir → Agregar a inicio).
 - Próximos pasos:
-  1. Cambiar la identidad completa de la plataforma de **Chambita Casa** a **Marea**: nombre visible, textos, metadatos, manifiesto PWA y logotipo.
+  1. ✅ Identidad visible migrada a **Marea**: nombre, textos, metadatos, manifiesto PWA y logotipo. Pendiente opcional: renombrar el repositorio y la URL técnica de Vercel.
   2. Implementar tareas recurrentes (pagar luz, etc.).
   3. Después de validar el acceso familiar, apagar "Allow new users to sign up" en Supabase.

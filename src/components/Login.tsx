@@ -35,11 +35,11 @@ export function Login() {
     <div className="min-h-full flex items-center justify-center bg-background px-4 py-10">
       <div className="w-full max-w-sm space-y-6">
         <div className="flex items-center gap-3">
-          <div role="img" aria-label="Chambita" className="w-11 h-11 rounded-xl bg-white shadow shrink-0"
-            style={{ backgroundImage: `url(${LOGO})`, backgroundSize: '160%', backgroundPosition: 'center' }} />
+          <div role="img" aria-label="Marea" className="w-11 h-11 rounded-xl bg-white shadow shrink-0"
+            style={{ backgroundImage: `url(${LOGO})`, backgroundSize: '92%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} />
           <div>
-            <h1 className="text-xl font-bold tracking-tight">Chambita Casa</h1>
-            <p className="text-sm text-muted-foreground">Nuestros pendientes, en un solo lugar.</p>
+            <h1 className="text-xl font-bold tracking-tight">Marea</h1>
+            <p className="text-sm text-muted-foreground">Finanzas, proyectos y hogar en un solo lugar.</p>
           </div>
         </div>
         <form onSubmit={submit} className="space-y-3">

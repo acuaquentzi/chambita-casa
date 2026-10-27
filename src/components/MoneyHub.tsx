@@ -14,7 +14,7 @@ export function MoneyHub({ onOpenProjects }: Props) {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <section className="overflow-hidden rounded-2xl border bg-gradient-to-br from-emerald-950 via-slate-900 to-indigo-950 px-5 py-7 text-white shadow-sm sm:px-8 sm:py-9">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">Marea se integra a Chambita</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">Marea · Finanzas del hogar</p>
         <div className="mt-3 grid gap-6 lg:grid-cols-[1fr_280px] lg:items-end">
           <div>
             <h2 className="max-w-2xl text-2xl font-bold tracking-tight sm:text-3xl">El dinero del hogar, conectado con lo que quieren lograr.</h2>

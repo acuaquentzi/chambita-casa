@@ -32,7 +32,7 @@ export function ExportMenu({ tasks, projects, filters, today }: Props) {
     }
     const open = tasks.filter(t => t.status !== 'Completado')
     const team = computeTeam(tasks, projects)
-    let s = `Resumen Chambita — ${today}\n\n`
+    let s = `Resumen Marea — ${today}\n\n`
     s += `Tareas: ${tasks.length} · abiertas ${open.length} · atrasadas ${open.filter(t => t.health === 'Atrasado').length} · en riesgo ${open.filter(t => t.health === 'En riesgo').length}\n`
     s += `Avance global: ${Math.round(tasks.reduce((a, t) => a + t.progress, 0) / Math.max(tasks.length, 1))}%\n\nPor estatus:\n`
     STATUSES.forEach(st => { s += `  ${st}: ${tasks.filter(t => t.status === st).length}\n` })
@@ -44,7 +44,7 @@ export function ExportMenu({ tasks, projects, filters, today }: Props) {
   }
 
   const run = async (type: 'tasks' | 'projects' | 'summary') => {
-    const name = type === 'summary' ? `resumen-chambita-${today}.txt` : `${type === 'tasks' ? 'tareas' : 'proyectos'}-chambita-${today}.csv`
+    const name = type === 'summary' ? `resumen-marea-${today}.txt` : `${type === 'tasks' ? 'tareas' : 'proyectos'}-marea-${today}.csv`
     const data = type === 'summary' ? build(type) : '﻿' + build(type)
     const r = await saveFile(name, data)
     setDone(r === 'saved' ? `${type}:Descargado` : r === 'copied' ? `${type}:Copiado al portapapeles` : `${type}:No se pudo exportar`)

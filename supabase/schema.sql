@@ -1,4 +1,4 @@
--- Chambita Casa: esquema de Supabase.
+-- Marea: esquema de Supabase.
 -- Cómo usarlo: Supabase → SQL Editor → New query → pega todo este archivo → cambia los 2 correos → Run.
 
 -- 1) Quién tiene acceso (solo estas personas pueden leer y escribir).

@@ -40,10 +40,10 @@ export function Sidebar({ view, onNavigate, sync, counts }: Props) {
     <div className="flex flex-col h-full w-full" style={{ background: 'hsl(var(--sidebar))' }}>
       <div className="px-5 pt-6 pb-5 border-b border-white/[0.06]">
         <div className="flex items-center gap-2.5">
-          <div role="img" aria-label="Chambita" className="w-9 h-9 rounded-xl bg-white shadow-[0_4px_14px_-4px_rgba(154,196,30,0.6)] shrink-0" style={{ backgroundImage: `url(${LOGO})`, backgroundSize: '160%', backgroundPosition: 'center' }} />
+          <div role="img" aria-label="Marea" className="w-9 h-9 rounded-xl bg-white shadow-[0_4px_14px_-4px_rgba(45,212,191,0.55)] shrink-0" style={{ backgroundImage: `url(${LOGO})`, backgroundSize: '92%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} />
           <div>
-            <p className="text-white text-sm font-semibold leading-tight">Chambita Casa</p>
-            <p className="text-[11px] leading-tight" style={{ color: 'hsl(var(--sidebar-foreground))' }}>Casa</p>
+            <p className="text-white text-sm font-semibold leading-tight">Marea</p>
+            <p className="text-[11px] leading-tight" style={{ color: 'hsl(var(--sidebar-foreground))' }}>Finanzas y hogar</p>
           </div>
         </div>
       </div>

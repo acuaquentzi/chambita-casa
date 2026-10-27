@@ -1,6 +1,6 @@
-# Chambita Casa
+# Marea
 
-Pendientes de casa para dos personas, instalable en iPhone.
+Finanzas, proyectos y vida familiar para dos personas, instalable en iPhone.
 
 ## Configuración (una sola vez)
 1. **Supabase → SQL Editor:** pega `supabase/schema.sql`, cambia los 2 correos y ejecuta (**Run**).
