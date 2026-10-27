@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 import { ArrowRight, Landmark, ReceiptText, RefreshCw, WalletCards } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
