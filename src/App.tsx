@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   type View, type Filters, type Task, type BaseTask, type SavedView, type ProjectMeta,
