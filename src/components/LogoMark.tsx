@@ -14,7 +14,7 @@ export function LogoMark({ className }: Props) {
       role={failed ? 'img' : undefined}
       aria-label={failed ? 'Marea' : undefined}
       className={cn(
-        'relative grid shrink-0 place-items-center overflow-hidden rounded-xl bg-white text-sm font-bold text-teal-700',
+        'relative grid shrink-0 place-items-center text-sm font-bold text-teal-300',
         className,
       )}
     >
@@ -24,7 +24,7 @@ export function LogoMark({ className }: Props) {
         <img
           src={LOGO}
           alt="Marea"
-          className="h-full w-full object-contain p-0.5"
+          className="h-full w-full object-contain drop-shadow-[0_8px_18px_rgba(45,212,191,0.28)]"
           onError={() => setFailed(true)}
         />
       )}
