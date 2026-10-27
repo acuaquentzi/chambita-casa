@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Ring, StatusBar, PersonAvatar } from './charts'
 import { FilterBar, Segmented } from './FilterBar'
-import { ArrowUpDown, LayoutGrid, Rows3, Plus } from 'lucide-react'
+import { ArrowUpDown, LayoutGrid, Rows3, Plus, FolderHeart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -52,20 +52,30 @@ export function ProjectsView({ projects, filters, setFilters, onSelectProject, o
   )
 
   return (
-    <div className="space-y-4 max-w-[1500px]">
+    <div className="max-w-[1500px] space-y-5">
+      <section className="marea-hero relative overflow-hidden rounded-[28px] p-5 text-white shadow-lift sm:p-7">
+        <div className="absolute -right-12 -top-14 h-48 w-48 rounded-full bg-pink-400/20 blur-3xl" />
+        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <div className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55"><FolderHeart className="h-4 w-4 text-pink-200" />Nuestros proyectos</div>
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Lo que estamos construyendo juntos</h2>
+            <p className="mt-2 text-sm leading-relaxed text-white/65">Cada proyecto es una página: qué queremos lograr, qué sigue y quién necesita apoyo.</p>
+          </div>
+          <Button className="h-11 rounded-xl bg-white px-5 font-bold text-[#10233f] hover:bg-white/90" onClick={onAddProject}><Plus className="mr-2 h-4 w-4" />Nuevo proyecto</Button>
+        </div>
+      </section>
       <FilterBar filters={filters} setFilters={setFilters} fields={['search', 'owner', 'status', 'priority', 'health']} placeholder="Buscar proyecto…">
         <Segmented value={mode} onChange={setMode} options={[
           { v: 'cards', l: <><LayoutGrid className="h-3.5 w-3.5" />Tarjetas</> },
           { v: 'table', l: <><Rows3 className="h-3.5 w-3.5" />Tabla</> },
         ]} />
-        <Button size="sm" variant="outline" className="h-8 gap-1.5" onClick={onAddProject}><Plus className="h-4 w-4" />Nuevo proyecto</Button>
       </FilterBar>
 
       {mode === 'cards' ? (
         <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
           {data.map(p => (
             <button key={p.id} onClick={() => onSelectProject(p.id)}
-              className="text-left rounded-xl border bg-card hover:shadow-lift hover:-translate-y-0.5 hover:border-primary/40 transition-all overflow-hidden flex flex-col">
+              className="marea-surface flex flex-col overflow-hidden rounded-[22px] text-left transition-all hover:-translate-y-1 hover:shadow-lift">
               <div className="h-1.5" style={{ background: HEALTH_HEX[p.health] }} />
               <div className="p-4 flex-1 flex flex-col gap-3">
                 <div className="flex items-start gap-3">
