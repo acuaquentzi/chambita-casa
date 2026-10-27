@@ -1,10 +1,11 @@
+sed: --: No such file or directory
 import { SHEET_PROJECTS, SHEET_TASKS } from './sheet'
 import { MEMBERS } from './config'
 
 export type Status = 'No iniciado' | 'En curso' | 'En espera' | 'Bloqueado' | 'Completado'
 export type Priority = 'Alta' | 'Media' | 'Baja'
 export type Health = 'En tiempo' | 'En riesgo' | 'Atrasado' | 'Completado'
-export type View = 'audit' | 'mine' | 'dashboard' | 'projects' | 'tasks' | 'kanban' | 'gantt' | 'team'
+export type View = 'audit' | 'mine' | 'dashboard' | 'projects' | 'tasks' | 'kanban' | 'gantt' | 'team' | 'money' | 'home'
 
 export interface Link { title: string; url: string }
 export interface ProjectMeta {
