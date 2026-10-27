@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 import path from "path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
