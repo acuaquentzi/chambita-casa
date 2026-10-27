@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 import { SHEET_PROJECTS, SHEET_TASKS } from './sheet'
 import { MEMBERS } from './config'
 
