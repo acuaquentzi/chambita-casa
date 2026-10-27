@@ -1,3 +1,4 @@
+sed: --: No such file or directory
 # AGENTS.md — Chambita Casa
 
 Instrucciones para agentes de código (Codex, Claude Code, etc.). Léelas antes de cambiar algo.
@@ -51,4 +52,7 @@ Todo el texto de la interfaz va en **español de México**.
   3. Editar campos distintos de la misma tarea desde los dos lados (merge_doc no debe pisar).
   4. Cerrar tarea pide comentario; mover fecha pide motivo.
   5. Vista móvil (375 px) sin desbordes; instalación en iPhone desde Safari (Compartir → Agregar a inicio).
-- Ideas pendientes: tareas recurrentes (pagar luz, etc.); después, apagar "Allow new users to sign up" en Supabase.
+- Próximos pasos:
+  1. Cambiar la identidad completa de la plataforma de **Chambita Casa** a **Marea**: nombre visible, textos, metadatos, manifiesto PWA y logotipo.
+  2. Implementar tareas recurrentes (pagar luz, etc.).
+  3. Después de validar el acceso familiar, apagar "Allow new users to sign up" en Supabase.
