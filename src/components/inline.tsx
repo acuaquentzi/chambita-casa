@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { type Task, type BaseTask, type Status, type Priority, STATUSES, PRIORITIES, ALL_OWNERS, STATUS_HEX, statusStyle, priorityStyle, progressColor, dueLabel, fmtDate } from '../data'
+import { type Task, type BaseTask, type Status, type Priority, STATUSES, PRIORITIES, ALL_OWNERS, STATUS_HEX, statusStyle, priorityStyle, progressColor, dueLabel, fmtDate, displayName } from '../data'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -45,7 +45,7 @@ export function InlinePriority({ task, onUpdate }: { task: Task; onUpdate?: Upda
 export function InlineOwner({ task, onUpdate, field = 'owner', showName = true }: { task: Task; onUpdate?: Update; field?: 'owner' | 'coOwner'; showName?: boolean }) {
   const name = task[field]
   const face = name
-    ? <div className="flex items-center gap-1.5 min-w-0"><PersonAvatar name={name} size="xs" />{showName && <div className="text-xs truncate">{name.split(' ')[0]}</div>}</div>
+    ? <div className="flex items-center gap-1.5 min-w-0"><PersonAvatar name={name} size="xs" />{showName && <div className="text-xs truncate">{displayName(name)}</div>}</div>
     : <div className="text-xs text-muted-foreground">+ agregar</div>
   if (!onUpdate) return face
   return (
@@ -53,7 +53,7 @@ export function InlineOwner({ task, onUpdate, field = 'owner', showName = true }
       <SelectTrigger className={cn(bare, 'rounded px-1 -mx-1 hover:bg-muted')} onClick={e => e.stopPropagation()} aria-label="Cambiar responsable">{face}</SelectTrigger>
       <SelectContent>
         {field === 'coOwner' && <SelectItem value="__none">Sin corresponsable</SelectItem>}
-        {ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+        {ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}
       </SelectContent>
     </Select></Stop>
   )

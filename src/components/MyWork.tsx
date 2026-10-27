@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { type Task, type BaseTask, STATUSES, STATUS_HEX, HEALTH_HEX, PROJECT_MAP, ALL_OWNERS, dueLabel, firstName } from '../data'
+import { type Task, type BaseTask, STATUSES, STATUS_HEX, HEALTH_HEX, PROJECT_MAP, ALL_OWNERS, dueLabel, firstName, displayName } from '../data'
 import { Textarea } from '@/components/ui/textarea'
 import { InlineDue } from './inline'
 import { PersonAvatar } from './charts'
@@ -53,7 +53,7 @@ export function MyWork({ risks, tasks, myOwner, onUpdateTask, onSelectTask }: Pr
         <div className="grid grid-cols-2 gap-2">
           {ALL_OWNERS.map(o => (
             <button key={o} onClick={() => choose(o)} className="flex items-center gap-2 rounded-xl border p-3 hover:bg-muted text-left">
-              <PersonAvatar name={o} size="md" /><span className="text-sm font-medium">{o}</span>
+              <PersonAvatar name={o} size="md" /><span className="text-sm font-medium">{displayName(o)}</span>
             </button>
           ))}
         </div>
@@ -75,7 +75,7 @@ export function MyWork({ risks, tasks, myOwner, onUpdateTask, onSelectTask }: Pr
           <label className="text-xs text-muted-foreground">
             Ver como{' '}
             <select value={person} onChange={e => choose(e.target.value)} className="bg-transparent underline underline-offset-2 cursor-pointer">
-              {ALL_OWNERS.map(o => <option key={o} value={o}>{o}</option>)}
+              {ALL_OWNERS.map(o => <option key={o} value={o}>{displayName(o)}</option>)}
             </select>
           </label>
         </div>

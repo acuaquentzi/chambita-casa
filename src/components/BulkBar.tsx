@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { type Task, type Status, type Priority, STATUSES, PRIORITIES, ALL_OWNERS } from '../data'
+import { type Task, type Status, type Priority, STATUSES, PRIORITIES, ALL_OWNERS, displayName } from '../data'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { RescheduleForm, useReschedules } from '../reschedule'
@@ -32,7 +32,7 @@ export function BulkBar({ selected, onUpdateTask, onClear }: Props) {
         <option value="">Estatus…</option>{STATUSES.map(s => <option key={s}>{s}</option>)}
       </select>
       <select className={sel} value="" onChange={e => e.target.value && apply({ owner: e.target.value })} aria-label="Cambiar responsable">
-        <option value="">Responsable…</option>{ALL_OWNERS.map(o => <option key={o}>{o}</option>)}
+        <option value="">Responsable…</option>{ALL_OWNERS.map(o => <option key={o} value={o}>{displayName(o)}</option>)}
       </select>
       <select className={sel} value="" onChange={e => e.target.value && apply({ priority: e.target.value as Priority })} aria-label="Cambiar prioridad">
         <option value="">Prioridad…</option>{PRIORITIES.map(p => <option key={p}>{p}</option>)}

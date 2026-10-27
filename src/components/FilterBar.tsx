@@ -1,4 +1,4 @@
-import { type Filters, defaultFilters, PROJECTS_META, ALL_OWNERS, STATUSES, PRIORITIES, HEALTHS } from '../data'
+import { type Filters, defaultFilters, PROJECTS_META, ALL_OWNERS, STATUSES, PRIORITIES, HEALTHS, displayName } from '../data'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -36,7 +36,7 @@ export function FilterBar({ filters, setFilters, fields = ['search', 'project', 
         </div>
       )}
       {sel('project', 'Proyecto', PROJECTS_META.map(p => ({ v: p.id, l: `${p.id} · ${p.name}` })), 'w-48')}
-      {sel('owner', 'Persona', ALL_OWNERS.map(o => ({ v: o, l: o })), 'w-44')}
+      {sel('owner', 'Persona', ALL_OWNERS.map(o => ({ v: o, l: displayName(o) })), 'w-44')}
       {sel('status', 'Estatus', STATUSES.map(s => ({ v: s, l: s })), 'w-36')}
       {sel('priority', 'Prioridad', PRIORITIES.map(s => ({ v: s, l: s })), 'w-32')}
       {sel('health', 'Salud', HEALTHS.map(s => ({ v: s, l: s })), 'w-32')}

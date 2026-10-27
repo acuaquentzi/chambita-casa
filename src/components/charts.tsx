@@ -1,4 +1,4 @@
-import { type Status, type Health, STATUSES, STATUS_HEX, HEALTH_HEX, AVATAR_COLORS, getInitials } from '../data'
+import { type Status, type Health, STATUSES, STATUS_HEX, HEALTH_HEX, AVATAR_COLORS, getInitials, displayName } from '../data'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
@@ -91,7 +91,7 @@ export function PersonAvatar({ name, size = 'sm', ring }: { name: string; size?:
           <AvatarFallback className={cn('text-white font-semibold', AVATAR_COLORS[name] || 'bg-slate-500')}>{getInitials(name)}</AvatarFallback>
         </Avatar>
       </TooltipTrigger>
-      <TooltipContent className="text-xs">{name}</TooltipContent>
+      <TooltipContent className="text-xs">{displayName(name)}</TooltipContent>
     </Tooltip>
   )
 }

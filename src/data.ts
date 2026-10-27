@@ -172,8 +172,9 @@ export function findDataIssues(tasks: Task[], projects: Project[]): DataIssue[] 
 }
 
 export const AVATAR_COLORS: Record<string, string> = Object.fromEntries(MEMBERS.map(m => [m.name, m.color]))
-export const getInitials = (name: string) => name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('')
-export const firstName = (name: string) => name.split(' ')[0]
+export const displayName = (name: string) => MEMBERS.find(m => m.name === name)?.alias ?? name
+export const getInitials = (name: string) => displayName(name).split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('')
+export const firstName = (name: string) => displayName(name).split(' ')[0]
 
 export const STATUS_HEX: Record<Status, string> = {
   'No iniciado': '#94a3b8', 'En curso': '#3b82f6', 'En espera': '#f59e0b', 'Bloqueado': '#ef4444', 'Completado': '#10b981',

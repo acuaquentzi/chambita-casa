@@ -4,7 +4,7 @@ import { useReschedules, RescheduleForm, RescheduleHistory, SlipBadge } from '..
 import { LinksEditor } from './LinksEditor'
 import {
   type Task, type Project, type ProjectMeta, type Comment, type Activity, type Status, type Priority, STATUS_HEX, HEALTH_HEX, STATUSES, PRIORITIES, ALL_OWNERS,
-  statusStyle, healthStyle, priorityStyle, daysBetween, fmtDate,
+  statusStyle, healthStyle, priorityStyle, daysBetween, fmtDate, displayName,
 } from '../data'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -93,7 +93,7 @@ export function ProjectDetail({ project: p, tasks, today, onClose, onUpdateTask,
                     <SelectTrigger className="h-7 w-auto gap-1.5 border-0 bg-transparent px-1 -mx-1 text-xs shadow-none hover:bg-muted" aria-label="Owner del proyecto">
                       <PersonAvatar name={p.owner} size="xs" /><SelectValue />
                     </SelectTrigger>
-                    <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
               </DialogDescription>

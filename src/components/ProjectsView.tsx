@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { type Filters, type Project, type Health, HEALTH_HEX, statusStyle, healthStyle, priorityStyle, fmtDate } from '../data'
+import { type Filters, type Project, type Health, HEALTH_HEX, statusStyle, healthStyle, priorityStyle, fmtDate, displayName } from '../data'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -88,7 +88,7 @@ export function ProjectsView({ projects, filters, setFilters, onSelectProject, o
                 </div>
                 <div className="flex items-center gap-2 mt-auto text-[11px] text-muted-foreground">
                   <PersonAvatar name={p.owner} size="xs" />
-                  <span className="truncate">{p.owner}</span>
+                  <span className="truncate">{displayName(p.owner)}</span>
                   <span className={cn('ml-auto tabular-nums whitespace-nowrap', p.daysToTarget < 0 && p.health !== 'Completado' && 'text-red-600 dark:text-red-400 font-semibold')}>
                     Meta {fmtDate(p.target)}
                   </span>
@@ -120,7 +120,7 @@ export function ProjectsView({ projects, filters, setFilters, onSelectProject, o
                   <TableRow key={p.id} className="cursor-pointer" onClick={() => onSelectProject(p.id)}>
                     <TableCell className="font-semibold text-primary">{p.id}</TableCell>
                     <TableCell className="max-w-[260px]"><span className="truncate block font-medium">{p.name}</span></TableCell>
-                    <TableCell className="whitespace-nowrap"><span className="flex items-center gap-2"><PersonAvatar name={p.owner} size="xs" />{p.owner.split(' ')[0]}</span></TableCell>
+                    <TableCell className="whitespace-nowrap"><span className="flex items-center gap-2"><PersonAvatar name={p.owner} size="xs" />{displayName(p.owner)}</span></TableCell>
                     <TableCell><Badge className={cn(priorityStyle(p.priority), 'border-0 text-[11px]')}>{p.priority}</Badge></TableCell>
                     <TableCell><Badge className={cn(statusStyle(p.status), 'border-0 text-[11px]')}>{p.status}</Badge></TableCell>
                     <TableCell>

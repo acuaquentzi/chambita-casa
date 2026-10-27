@@ -1,4 +1,4 @@
-import { type BaseTask, type Priority, type Project, ALL_OWNERS, PRIORITIES } from '../data'
+import { type BaseTask, type Priority, type Project, ALL_OWNERS, PRIORITIES, displayName } from '../data'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -28,7 +28,7 @@ export function NewTaskDialog({ open, onOpenChange, draft, setDraft, onCreate }:
           <ProjectPicker value={draft.project} onChange={v => setDraft(t => ({ ...t, project: v }))} />
           <Select value={draft.owner || undefined} onValueChange={v => setDraft(t => ({ ...t, owner: v }))}>
             <SelectTrigger><SelectValue placeholder="Responsable" /></SelectTrigger>
-            <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+            <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}</SelectContent>
           </Select>
           <div className="flex gap-2">
             <Select value={draft.priority} onValueChange={v => setDraft(t => ({ ...t, priority: v as Priority }))}>
@@ -55,7 +55,7 @@ export function NewProjectDialog({ open, onOpenChange, draft, setDraft, onCreate
           <Input placeholder="Nombre del proyecto" value={draft.name} onChange={e => setDraft(p => ({ ...p, name: e.target.value }))} />
           <Select value={draft.owner || undefined} onValueChange={v => setDraft(p => ({ ...p, owner: v }))}>
             <SelectTrigger><SelectValue placeholder="Owner del proyecto" /></SelectTrigger>
-            <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+            <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}</SelectContent>
           </Select>
           <div className="flex gap-2">
             <Select value={draft.priority} onValueChange={v => setDraft(p => ({ ...p, priority: v as Priority }))}>

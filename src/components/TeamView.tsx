@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { type Task, type TeamMember, type View, type Filters, HEALTH_HEX, PROJECT_MAP, dueLabel, STATUS_HEX } from '../data'
+import { type Task, type TeamMember, type View, type Filters, HEALTH_HEX, PROJECT_MAP, dueLabel, STATUS_HEX, displayName } from '../data'
 import { Card, CardContent } from '@/components/ui/card'
 import { Ring, StatusBar, PersonAvatar } from './charts'
 import { cn } from '@/lib/utils'
@@ -42,7 +42,7 @@ export function TeamView({ tasks, team, onSelectTask, onNavigate }: Props) {
                 <button className="flex items-center gap-3 w-full text-left group" onClick={() => onNavigate('tasks', { owner: m.name })}>
                   <PersonAvatar name={m.name} size="lg" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold truncate group-hover:text-primary">{m.name}</p>
+                    <p className="text-sm font-bold truncate group-hover:text-primary">{displayName(m.name)}</p>
                     <p className="text-[11px] text-muted-foreground">{m.projects} proyecto(s) como owner · {m.tasks} tareas</p>
                   </div>
                   <Ring value={m.progress} size={46} stroke={5} />

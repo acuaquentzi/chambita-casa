@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import {
   type View, type Filters, type Task, type Project, type TeamMember, type Health, type Status,
   STATUSES, STATUS_HEX, HEALTH_HEX, PROJECT_MAP, addDays, parseISO, fmtDate, firstName, dueLabel,
-  findDataIssues, priorityStyle,
+  findDataIssues, priorityStyle, displayName,
 } from '../data'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -210,7 +210,7 @@ export function Dashboard({ tasks, projects, team, today, metrics, risks, onNavi
                 className="grid grid-cols-[150px_1fr_auto] items-center gap-3 w-full text-left group">
                 <span className="flex items-center gap-2 min-w-0">
                   <PersonAvatar name={m.name} size="sm" />
-                  <span className="text-sm font-medium truncate group-hover:text-primary">{m.name}</span>
+                  <span className="text-sm font-medium truncate group-hover:text-primary">{displayName(m.name)}</span>
                 </span>
                 <span className="flex h-5 rounded overflow-hidden bg-muted" style={{ width: `${(m.tasks / maxLoad) * 100}%`, minWidth: 8 }}>
                   {STATUSES.filter(s => m.statusCounts[s] > 0).map(s => (
