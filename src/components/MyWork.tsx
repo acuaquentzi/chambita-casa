@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { InlineDue } from './inline'
 import { PersonAvatar } from './charts'
 import { SlipBadge } from '../reschedule'
-import { Check, ChevronDown, ExternalLink, CornerDownRight } from 'lucide-react'
+import { Check, ChevronDown, ExternalLink, CornerDownRight, NotebookPen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { RiskCard } from './RiskCard'
 import type { Risks } from '../risks'
@@ -67,31 +67,35 @@ export function MyWork({ risks, tasks, myOwner, onUpdateTask, onSelectTask }: Pr
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4 pb-16">
-      <div className="flex items-center gap-3">
-        <PersonAvatar name={person} size="lg" />
+    <div className="mx-auto max-w-3xl space-y-5 pb-16">
+      <div className="marea-hero relative overflow-hidden rounded-[28px] p-5 text-white shadow-lift sm:p-6">
+        <div className="absolute -right-8 -top-10 h-36 w-36 rounded-full bg-pink-400/20 blur-2xl" />
+        <div className="relative flex items-center gap-3">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/12 text-pink-200"><NotebookPen className="h-6 w-6" /></div>
         <div className="min-w-0 flex-1">
-          <p className="text-base font-bold leading-tight">{firstName(person)}, tienes {mine.length} pendiente{mine.length === 1 ? '' : 's'}</p>
-          <label className="text-xs text-muted-foreground">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55">Mi página de hoy</p>
+          <p className="mt-1 text-xl font-extrabold leading-tight">{firstName(person)}, tienes {mine.length} pendiente{mine.length === 1 ? '' : 's'}</p>
+          <label className="text-xs text-white/60">
             Ver como{' '}
-            <select value={person} onChange={e => choose(e.target.value)} className="bg-transparent underline underline-offset-2 cursor-pointer">
+            <select value={person} onChange={e => choose(e.target.value)} className="cursor-pointer bg-transparent font-semibold text-white underline underline-offset-2">
               {ALL_OWNERS.map(o => <option key={o} value={o}>{displayName(o)}</option>)}
             </select>
           </label>
         </div>
-        <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer select-none shrink-0">
+        <label className="hidden cursor-pointer select-none items-center gap-1.5 text-xs text-white/60 sm:flex">
           <input type="checkbox" className="accent-primary h-4 w-4" checked={showDone} onChange={e => setShowDone(e.target.checked)} />
           Mostrar completadas
-        </label>
+        </label></div>
+        <p className="relative mt-4 max-w-xl text-sm leading-relaxed text-white/65">Una lista corta y clara. Marca lo que terminaste y deja que Marea acomode el resto.</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {GROUPS.map(g => {
           const n = mine.filter(g.test).length
           return (
             <a key={g.id} href={`#mine-${g.id}`} onClick={e => { e.preventDefault(); document.getElementById(`mine-${g.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}
-              className="rounded-xl border bg-card p-2 text-center">
-              <p className="text-xl font-bold tabular-nums" style={{ color: n ? g.color : undefined }}>{n}</p>
+              className="marea-surface rounded-2xl p-3 text-left transition hover:-translate-y-0.5 hover:shadow-soft">
+              <p className="text-2xl font-extrabold tabular-nums" style={{ color: n ? g.color : undefined }}>{n}</p>
               <p className="text-[10px] text-muted-foreground leading-tight">{g.label}</p>
             </a>
           )
@@ -101,7 +105,7 @@ export function MyWork({ risks, tasks, myOwner, onUpdateTask, onSelectTask }: Pr
       {agile && (() => {
         const c = commitStats(tasks, person, agile.week)
         return (
-          <div className="rounded-xl border bg-card p-3 space-y-2">
+          <div className="marea-surface space-y-3 rounded-[22px] p-4">
             <div className="flex items-center gap-2">
               <p className="text-sm font-semibold flex-1">Mi compromiso de la semana</p>
               <WipBadge count={inProgressOf(tasks, person)} limit={agile.wipLimit ?? DEFAULT_WIP} />
