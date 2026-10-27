@@ -177,7 +177,7 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
 
   const addTask = useCallback(() => {
     if (!newTask.name || !newTask.project || !newTask.owner) return
-    const maxN = Math.max(...Object.values(baseByKey).map(t => Number(t.id.replace(/\D/g, '')) || 0))
+    const maxN = Math.max(0, ...Object.values(baseByKey).map(t => Number(t.id.replace(/\D/g, '')) || 0))
     const id = `T-${String(maxN + 1).padStart(3, '0')}`
     const key = `${id}-n${Date.now().toString(36)}`
     const task: BaseTask = {
