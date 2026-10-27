@@ -7,8 +7,8 @@ create table if not exists public.members (
   name  text not null
 );
 insert into public.members (email, name) values
-  ('TU_CORREO@gmail.com', 'Alejandro'),
-  ('CORREO_PAREJA@gmail.com', 'Pareja')
+  ('alecuaquentzi@gmail.com', 'Alejandro'),
+  ('tjacky06@gmail.com', 'Pareja')
 on conflict (email) do update set name = excluded.name;
 
 create or replace function public.is_member() returns boolean
