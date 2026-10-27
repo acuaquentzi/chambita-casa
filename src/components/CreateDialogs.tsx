@@ -8,8 +8,8 @@ import { ProjectPicker } from './ProjectPicker'
 export interface TaskDraft { name: string; project: string; owner: string; priority: Priority; due: string; extra: Partial<BaseTask>; copyOf: string }
 export const EMPTY_TASK: TaskDraft = { name: '', project: '', owner: '', priority: 'Media', due: '', extra: {}, copyOf: '' }
 
-export interface ProjectDraft { name: string; owner: string; priority: Priority; target: string; basedOn: string }
-export const EMPTY_PROJECT: ProjectDraft = { name: '', owner: '', priority: 'Media', target: '', basedOn: '' }
+export interface ProjectDraft { name: string; owner: string; coOwner: string; priority: Priority; target: string; basedOn: string }
+export const EMPTY_PROJECT: ProjectDraft = { name: '', owner: '', coOwner: '', priority: 'Media', target: '', basedOn: '' }
 
 type Setter<T> = React.Dispatch<React.SetStateAction<T>>
 
@@ -26,9 +26,16 @@ export function NewTaskDialog({ open, onOpenChange, draft, setDraft, onCreate }:
         <div className="space-y-3 pt-2">
           <Input placeholder="Nombre de la tarea" value={draft.name} onChange={e => setDraft(t => ({ ...t, name: e.target.value }))} />
           <ProjectPicker value={draft.project} onChange={v => setDraft(t => ({ ...t, project: v }))} />
-          <Select value={draft.owner || undefined} onValueChange={v => setDraft(t => ({ ...t, owner: v }))}>
-            <SelectTrigger><SelectValue placeholder="Responsable" /></SelectTrigger>
+          <Select value={draft.owner || undefined} onValueChange={v => setDraft(t => ({ ...t, owner: v, extra: { ...t.extra, coOwner: t.extra.coOwner === v ? '' : t.extra.coOwner } }))}>
+            <SelectTrigger><SelectValue placeholder="Responsable principal" /></SelectTrigger>
             <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}</SelectContent>
+          </Select>
+          <Select value={draft.extra.coOwner || '__none'} onValueChange={v => setDraft(t => ({ ...t, extra: { ...t.extra, coOwner: v === '__none' ? '' : v } }))}>
+            <SelectTrigger><SelectValue placeholder="Corresponsable (opcional)" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__none">Sin corresponsable</SelectItem>
+              {ALL_OWNERS.filter(o => o !== draft.owner).map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}
+            </SelectContent>
           </Select>
           <div className="flex gap-2">
             <Select value={draft.priority} onValueChange={v => setDraft(t => ({ ...t, priority: v as Priority }))}>
@@ -53,9 +60,16 @@ export function NewProjectDialog({ open, onOpenChange, draft, setDraft, onCreate
         <DialogHeader><DialogTitle>Nuevo proyecto</DialogTitle></DialogHeader>
         <div className="space-y-3 pt-2">
           <Input placeholder="Nombre del proyecto" value={draft.name} onChange={e => setDraft(p => ({ ...p, name: e.target.value }))} />
-          <Select value={draft.owner || undefined} onValueChange={v => setDraft(p => ({ ...p, owner: v }))}>
-            <SelectTrigger><SelectValue placeholder="Owner del proyecto" /></SelectTrigger>
+          <Select value={draft.owner || undefined} onValueChange={v => setDraft(p => ({ ...p, owner: v, coOwner: p.coOwner === v ? '' : p.coOwner }))}>
+            <SelectTrigger><SelectValue placeholder="Responsable principal" /></SelectTrigger>
             <SelectContent>{ALL_OWNERS.map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}</SelectContent>
+          </Select>
+          <Select value={draft.coOwner || '__none'} onValueChange={v => setDraft(p => ({ ...p, coOwner: v === '__none' ? '' : v }))}>
+            <SelectTrigger><SelectValue placeholder="Corresponsable (opcional)" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__none">Solo responsable principal</SelectItem>
+              {ALL_OWNERS.filter(o => o !== draft.owner).map(o => <SelectItem key={o} value={o}>{displayName(o)}</SelectItem>)}
+            </SelectContent>
           </Select>
           <div className="flex gap-2">
             <Select value={draft.priority} onValueChange={v => setDraft(p => ({ ...p, priority: v as Priority }))}>
