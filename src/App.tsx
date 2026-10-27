@@ -324,8 +324,8 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
             {view === 'kanban' && <KanbanView {...commonProps} />}
             {view === 'gantt' && <GanttView tasks={tasks} projects={projects} filters={filters} setFilters={setFilters} today={today} onSelectTask={setSelectedTask} />}
             {view === 'team' && <TeamView tasks={tasks} team={team} onSelectTask={setSelectedTask} onNavigate={navigate} />}
-            {view === 'money' && <MoneyHub accounts={store.financeAccounts} owners={ALL_OWNERS} today={today}
-              onSaveAccount={store.saveFinanceAccount} onOpenProjects={() => navigate('projects')} />}
+            {view === 'money' && <MoneyHub accounts={store.financeAccounts} transactions={store.financeTransactions} owners={ALL_OWNERS} today={today}
+              onSaveAccount={store.saveFinanceAccount} onSaveTransaction={store.saveFinanceTransaction} onOpenProjects={() => navigate('projects')} />}
             {view === 'home' && <TeamView tasks={tasks} team={team} onSelectTask={setSelectedTask} onNavigate={navigate} />}
           </main>
 
