@@ -258,11 +258,11 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
     <TooltipProvider delayDuration={200}>
       <RescheduleProvider value={rescheduleApi}>
       <AgileProvider value={agileApi}>
-      <div className="flex h-full overflow-hidden bg-background">
-        <aside className="hidden lg:flex w-[248px] flex-shrink-0">{sidebar}</aside>
+      <div className="marea-shell flex h-full overflow-hidden">
+        <aside className="hidden lg:flex w-[268px] flex-shrink-0 p-3 pr-0">{sidebar}</aside>
 
         <div className="flex flex-col flex-1 min-w-0">
-          <header className="sticky top-0 z-40 flex items-center gap-3 border-b border-border/70 bg-card/85 backdrop-blur-md supports-[backdrop-filter]:bg-card/70 px-4 lg:px-8 h-16 shrink-0">
+          <header className="sticky top-0 z-40 mx-3 mt-3 flex h-16 shrink-0 items-center gap-3 rounded-2xl border border-white/60 bg-card/85 px-4 shadow-soft backdrop-blur-xl supports-[backdrop-filter]:bg-card/72 lg:mx-5 lg:px-6">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Menú"><Menu className="h-5 w-5" /></Button>
@@ -316,7 +316,7 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
             </div>
           )}
 
-          <main ref={mainRef} className="flex-1 overflow-auto px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
+          <main ref={mainRef} className="marea-main flex-1 overflow-auto px-4 py-5 sm:px-6 lg:px-8 lg:py-7 [&>*]:relative">
             {view === 'mine' && <MyWork risks={risks} tasks={tasks} myOwner={myOwner} onUpdateTask={updateTask} onSelectTask={setSelectedTask} />}
             {view === 'dashboard' && <Dashboard tasks={tasks} projects={projects} team={team} today={today} metrics={store.metrics} risks={risks} onNavigate={navigate} onSelectTask={setSelectedTask} onSelectProject={setSelectedProject} />}
             {view === 'projects' && <ProjectsView projects={projects} filters={filters} setFilters={setFilters} onSelectProject={setSelectedProject} onAddProject={() => setAddProjectOpen(true)} />}
@@ -329,7 +329,7 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
             {view === 'home' && <TeamView tasks={tasks} team={team} onSelectTask={setSelectedTask} onNavigate={navigate} />}
           </main>
 
-          <nav className="sm:hidden grid grid-cols-4 border-t bg-card shrink-0" aria-label="Navegación principal">
+          <nav className="marea-bottom-nav sm:hidden grid grid-cols-4 shrink-0" aria-label="Navegación principal">
             {([['mine', 'Hoy', ListTodo], ['projects', 'Proyectos', FolderKanban], ['money', 'Dinero', WalletCards], ['home', 'Hogar', House]] as const).map(([v, label, Icon]) => (
               <button key={v} onClick={() => navigate(v)} aria-current={view === v ? 'page' : undefined}
                 className={cn('flex flex-col items-center justify-center gap-0.5 h-14 text-[11px]', view === v ? 'text-primary font-semibold' : 'text-muted-foreground')}>

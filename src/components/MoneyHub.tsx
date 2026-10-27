@@ -84,20 +84,20 @@ export function MoneyHub({ accounts, transactions, owners, today, onSaveAccount,
 
   return (
     <div className="mx-auto max-w-6xl space-y-5">
-      <section className="overflow-hidden rounded-2xl border bg-gradient-to-br from-emerald-950 via-slate-900 to-indigo-950 px-5 py-6 text-white shadow-sm sm:px-8 sm:py-8">
+      <section className="marea-hero overflow-hidden rounded-[1.75rem] border border-white/10 px-5 py-6 text-white shadow-lift sm:px-8 sm:py-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">Marea · Finanzas del hogar</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-pink-200">Marea · Finanzas del hogar</p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">Su dinero, sin capturas diarias.</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-white/70">Primero registramos dónde vive el dinero. Después Marea usará archivos y estados de cuenta para proponer movimientos y ustedes solo confirmarán excepciones.</p>
           </div>
-          <Button onClick={startNew} className="shrink-0 gap-2 bg-emerald-400 text-emerald-950 hover:bg-emerald-300">
+          <Button onClick={startNew} className="shrink-0 gap-2 rounded-xl bg-white text-[#15365f] shadow-soft hover:bg-pink-50">
             <Plus className="h-4 w-4" /> Agregar cuenta o tarjeta
           </Button>
         </div>
       </section>
 
-      <nav className="flex gap-1 overflow-x-auto rounded-xl border bg-card p-1" aria-label="Secciones financieras">
+      <nav className="marea-surface flex gap-1 overflow-x-auto p-1.5" aria-label="Secciones financieras">
         {([
           ['resumen', 'Resumen', WalletCards], ['cuentas', 'Cuentas y tarjetas', CreditCard],
           ['movimientos', 'Movimientos', ReceiptText], ['conciliacion', 'Conciliación', RefreshCw],

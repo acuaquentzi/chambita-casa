@@ -32,26 +32,28 @@ export function Login() {
   }
 
   return (
-    <div className="min-h-full flex items-center justify-center bg-background px-4 py-10">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="flex items-center gap-3">
-          <LogoMark className="h-11 w-11 shadow" />
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">Marea</h1>
-            <p className="text-sm text-muted-foreground">Finanzas, proyectos y hogar en un solo lugar.</p>
-          </div>
-        </div>
+    <div className="marea-shell min-h-full px-4 py-6 sm:grid sm:place-items-center">
+      <div className="marea-surface mx-auto grid w-full max-w-4xl overflow-hidden sm:grid-cols-[1.05fr_.95fr]">
+        <section className="marea-hero relative hidden min-h-[560px] flex-col justify-between overflow-hidden p-10 text-white sm:flex">
+          <div className="flex items-center gap-3"><LogoMark className="h-12 w-12 rounded-2xl" /><div><p className="text-xl font-extrabold">Marea</p><p className="text-xs uppercase tracking-[.18em] text-white/50">Nuestra vida, en orden</p></div></div>
+          <div><p className="max-w-sm text-4xl font-extrabold leading-[1.08] tracking-[-.045em]">Lo importante de dos vidas, en un solo lugar.</p><p className="mt-4 max-w-sm text-sm leading-6 text-white/65">Finanzas sin capturas diarias, pendientes claros y espacio para organizar el hogar sin complicaciones.</p></div>
+          <div className="flex gap-2"><span className="rounded-full bg-blue-300/15 px-3 py-1.5 text-xs font-semibold text-blue-100">● Momio</span><span className="rounded-full bg-pink-300/15 px-3 py-1.5 text-xs font-semibold text-pink-100">● Momia</span></div>
+        </section>
+        <section className="flex flex-col justify-center p-6 sm:p-10">
+          <div className="mb-8 flex items-center gap-3 sm:hidden"><LogoMark className="h-12 w-12 rounded-2xl shadow-soft" /><div><h1 className="text-2xl font-extrabold">Marea</h1><p className="text-sm text-muted-foreground">Nuestra vida, en orden.</p></div></div>
+          <div className="mb-6"><p className="text-xs font-bold uppercase tracking-[.18em] text-pink-500">Bienvenidos a casa</p><h2 className="mt-2 text-2xl font-extrabold tracking-[-.035em]">Entrar a Marea</h2><p className="mt-2 text-sm text-muted-foreground">Un espacio privado para Momio y Momia.</p></div>
         <form onSubmit={submit} className="space-y-3">
           <label className="block text-sm font-medium" htmlFor="email">Correo</label>
           <Input id="email" type="email" inputMode="email" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} placeholder="nombre@gmail.com" />
           <label className="block text-sm font-medium" htmlFor="password">{mode === 'signup' ? 'Crea tu contraseña (mínimo 8)' : 'Contraseña'}</label>
           <Input id="password" type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} required value={password} onChange={e => setPassword(e.target.value)} />
-          <Button type="submit" className="w-full" disabled={busy}>{busy ? 'Un momento…' : mode === 'signup' ? 'Crear mi contraseña y entrar' : 'Entrar'}</Button>
+          <Button type="submit" className="h-11 w-full rounded-xl bg-[#15365f] shadow-soft hover:bg-[#0d294b]" disabled={busy}>{busy ? 'Un momento…' : mode === 'signup' ? 'Crear mi contraseña y entrar' : 'Entrar'}</Button>
           <button type="button" className="text-xs text-muted-foreground underline" onClick={() => { setMode(m => (m === 'login' ? 'signup' : 'login')); setMsg('') }}>
             {mode === 'login' ? 'Primera vez: crear mi contraseña' : 'Ya tengo contraseña: entrar'}
           </button>
         </form>
-        {msg && <p className="text-sm text-muted-foreground" role="status">{msg}</p>}
+        {msg && <p className="mt-4 text-sm text-muted-foreground" role="status">{msg}</p>}
+        </section>
       </div>
     </div>
   )
