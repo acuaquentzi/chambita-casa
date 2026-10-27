@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { type BaseTask, type ProjectMeta, type Comment, type Activity, type Reschedule, type SavedView, ALL_OWNERS } from './data'
+import type { FinanceAccount } from './finance'
 
 import { db as supaDb } from './supabase'
 import type { AppUser } from './supabase'
@@ -36,6 +37,7 @@ export function useStore(user: AppUser) {
   const [me, setMe] = useState<{ id: string | null; name: string; avatarUrl: string }>({ id: null, name: '', avatarUrl: '' })
   const [error, setError] = useState<string | null>(null)
   const [settings, setSettings] = useState<{ wipLimit?: number }>({})
+  const [financeAccounts, setFinanceAccounts] = useState<FinanceAccount[]>([])
   const [isOwner, setIsOwner] = useState(false)
   const dbRef = useRef<Cap | null>(null)
   const userRef = useRef<Cap | null>(null)
@@ -80,6 +82,10 @@ export function useStore(user: AppUser) {
       }, onErr))
       unsubs.push(db.collection('reschedules').orderBy('at', 'desc').limit(1000).onSnapshot((snap: Cap) => {
         setReschedules(snap.docs.map((d: Cap) => ({ ...(d.data() as Reschedule), id: d.id })))
+      }, onErr))
+      unsubs.push(db.collection('finance_accounts').onSnapshot((snap: Cap) => {
+        setFinanceAccounts(snap.docs.map((d: Cap) => ({ ...(d.data() as FinanceAccount), id: d.id }))
+          .sort((a: FinanceAccount, b: FinanceAccount) => a.owner.localeCompare(b.owner, 'es') || a.institution.localeCompare(b.institution, 'es')))
       }, onErr))
       if (uidRef.current) {
         unsubs.push(db.doc(`data/users/${uidRef.current}/prefs`).onSnapshot(
@@ -196,9 +202,18 @@ export function useStore(user: AppUser) {
     logAudit('Cambió configuración', 'settings', { field: 'Límite WIP', to: String(patch.wipLimit ?? '') })
   }, [writeFields, logAudit])
 
+  const saveFinanceAccount = useCallback((account: FinanceAccount, create = false) => {
+    setFinanceAccounts(prev => {
+      const next = prev.filter(a => a.id !== account.id).concat(account)
+      return next.sort((a, b) => a.owner.localeCompare(b.owner, 'es') || a.institution.localeCompare(b.institution, 'es'))
+    })
+    writeFields(`finance_accounts/${account.id}`, { ...account }, create)
+  }, [writeFields])
+
   return {
     settings, saveSettings,
     overrides, projectOverrides, metrics, comments, activity, reschedules, prefs, sync, me, error, userRef, isOwner,
+    financeAccounts, saveFinanceAccount,
     saveTask, saveProject, logActivity, loadAudit, addReschedule, savePrefs, addComment, clearError: () => setError(null),
   }
 }
