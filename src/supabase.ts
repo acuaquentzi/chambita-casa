@@ -3,7 +3,8 @@
 import { createClient, type Session } from '@supabase/supabase-js'
 import { SUPABASE_URL, SUPABASE_ANON_KEY, MEMBERS } from './config'
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+// Valores de relleno si falta configuración: main.tsx muestra el aviso en lugar de una pantalla en blanco.
+export const supabase = createClient(SUPABASE_URL || 'https://missing.supabase.co', SUPABASE_ANON_KEY || 'missing', {
   auth: { persistSession: true, autoRefreshToken: true },
 })
 

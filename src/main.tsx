@@ -4,8 +4,9 @@ import type { Session } from '@supabase/supabase-js'
 import './index.css'
 import App from './App.tsx'
 import { Login } from './components/Login'
-import { supabase, makeUser } from './supabase'
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config'
 import { setCurrentUser } from './store'
+import { supabase, makeUser } from './supabase'
 
 function Root() {
   const [session, setSession] = useState<Session | null | undefined>(undefined)
@@ -22,8 +23,15 @@ function Root() {
   return <App key={session.user.id} onSignOut={() => supabase.auth.signOut()} />
 }
 
-createRoot(document.getElementById('root')!).render(
+const missing = [!SUPABASE_URL && 'VITE_SUPABASE_URL', !SUPABASE_ANON_KEY && 'VITE_SUPABASE_ANON_KEY'].filter(Boolean)
+
+createRoot(document.getElementById('root')!).render(missing.length ? (
+  <div style={{ padding: 24, fontFamily: 'system-ui', lineHeight: 1.5 }}>
+    <h1 style={{ fontSize: 18 }}>Falta configuración</h1>
+    <p>En Vercel → Settings → Environment Variables falta: <b>{missing.join(', ')}</b>. Agrégala y vuelve a publicar (Deployments → Redeploy).</p>
+  </div>
+) : 
   <StrictMode>
     <Root />
-  </StrictMode>,
-)
+  </StrictMode>
+))
