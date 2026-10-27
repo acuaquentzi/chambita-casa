@@ -1,4 +1,3 @@
-sed: --: No such file or directory
 import { StrictMode, useEffect, useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import type { Session } from '@supabase/supabase-js'
