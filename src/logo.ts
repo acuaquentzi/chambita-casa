@@ -1,2 +1,2 @@
-// icon.png is the verified binary asset used by the installed app and the UI.
-export const LOGO = '/icon.png'
+// The interface uses the transparent mark; icon.png remains the square PWA icon.
+export const LOGO = '/marea-logo.png'
