@@ -165,7 +165,7 @@ export default function App({ user, onSignOut }: { user: AppUser; onSignOut: () 
     if (!newProject.name || !newProject.owner) return
     const maxN = Math.max(0, ...projectMetas.map(p => Number(p.id.replace(/\D/g, '')) || 0))
     const id = `P-${String(maxN + 1).padStart(2, '0')}`
-    const p: ProjectMeta = { id, name: newProject.name, owner: newProject.owner, priority: newProject.priority, status: 'No iniciado', start: today, target: newProject.target || addDays(today, 30) }
+    const p: ProjectMeta = { id, name: newProject.name, owner: newProject.owner, coOwner: newProject.coOwner, priority: newProject.priority, status: 'No iniciado', start: today, target: newProject.target || addDays(today, 30) }
     store.saveProject(id, p, [{ field: 'Proyecto creado', from: '', to: p.name }], true)
     setNewProject(EMPTY_PROJECT)
     setAddProjectOpen(false)
