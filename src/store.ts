@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { type BaseTask, type ProjectMeta, type Comment, type Activity, type Reschedule, type SavedView, ALL_OWNERS } from './data'
-import type { FinanceAccount } from './finance'
+import type { FinanceAccount, FinanceTransaction } from './finance'
 
 import { db as supaDb } from './supabase'
 import type { AppUser } from './supabase'
@@ -38,6 +38,7 @@ export function useStore(user: AppUser) {
   const [error, setError] = useState<string | null>(null)
   const [settings, setSettings] = useState<{ wipLimit?: number }>({})
   const [financeAccounts, setFinanceAccounts] = useState<FinanceAccount[]>([])
+  const [financeTransactions, setFinanceTransactions] = useState<FinanceTransaction[]>([])
   const [isOwner, setIsOwner] = useState(false)
   const dbRef = useRef<Cap | null>(null)
   const userRef = useRef<Cap | null>(null)
@@ -86,6 +87,10 @@ export function useStore(user: AppUser) {
       unsubs.push(db.collection('finance_accounts').onSnapshot((snap: Cap) => {
         setFinanceAccounts(snap.docs.map((d: Cap) => ({ ...(d.data() as FinanceAccount), id: d.id }))
           .sort((a: FinanceAccount, b: FinanceAccount) => a.owner.localeCompare(b.owner, 'es') || a.institution.localeCompare(b.institution, 'es')))
+      }, onErr))
+      unsubs.push(db.collection('finance_transactions').onSnapshot((snap: Cap) => {
+        setFinanceTransactions(snap.docs.map((d: Cap) => ({ ...(d.data() as FinanceTransaction), id: d.id }))
+          .sort((a: FinanceTransaction, b: FinanceTransaction) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt)))
       }, onErr))
       if (uidRef.current) {
         unsubs.push(db.doc(`data/users/${uidRef.current}/prefs`).onSnapshot(
@@ -210,10 +215,18 @@ export function useStore(user: AppUser) {
     writeFields(`finance_accounts/${account.id}`, { ...account }, create)
   }, [writeFields])
 
+  const saveFinanceTransaction = useCallback((transaction: FinanceTransaction, create = false) => {
+    setFinanceTransactions(prev => {
+      const next = prev.filter(t => t.id !== transaction.id).concat(transaction)
+      return next.sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt))
+    })
+    writeFields(`finance_transactions/${transaction.id}`, { ...transaction }, create)
+  }, [writeFields])
+
   return {
     settings, saveSettings,
     overrides, projectOverrides, metrics, comments, activity, reschedules, prefs, sync, me, error, userRef, isOwner,
-    financeAccounts, saveFinanceAccount,
+    financeAccounts, saveFinanceAccount, financeTransactions, saveFinanceTransaction,
     saveTask, saveProject, logActivity, loadAudit, addReschedule, savePrefs, addComment, clearError: () => setError(null),
   }
 }
